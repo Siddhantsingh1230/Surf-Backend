@@ -4,7 +4,8 @@ import { configDotenv } from "dotenv";
 export const app = express();
 
 //-Middlewares
-
+app.use(express.json());
+app.use(express.static(path.join(path.resolve(), "public")));
 //environment variables
 configDotenv({
   path: "./data/config.env",

@@ -5,7 +5,7 @@ export const connectDBAndListen = () => {
   mongoose
     .connect(process.env.MONGODB_URI)
     .then(() => {
-      console.log("DB Online");
+      console.log("Surf DB Online");
       app.listen(process.env.PORT, () => {
         console.log(`App running on PORT ${process.env.PORT}`);
       });

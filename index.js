@@ -1,5 +1,5 @@
-import { app,port } from "./app.js";
+import { connectDBAndListen } from "./data/database.js";
 
-app.listen(port, () => {
-  console.log(`Surf Running On port${port}`);
-});
+// Database connection and  APP Listens
+
+  connectDBAndListen()

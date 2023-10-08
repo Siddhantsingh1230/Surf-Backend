@@ -25,7 +25,7 @@ const ordersSchema = mongoose.SchemaTypes({
     },
     paymentMethod : {
         type : String,
-        default :"CashOnDelivery",
+        required : true,
     },
     cart : {
         type : [mongoose.Schema.Types.Mixed],

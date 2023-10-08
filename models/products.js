@@ -1,18 +1,18 @@
 import mongoose from "mongoose";
 
-
 const productsSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true
+    required: true,
+    unique:true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
-    required: true
+    required: true,
   },
   discountPercentage: {
     type: Number,
@@ -24,30 +24,46 @@ const productsSchema = new mongoose.Schema({
     type: Number,
     min: [1, "wrong min rating"],
     max: [5, "wrong max rating"],
-    default: 0,
+    default: 1,
   },
   stock: {
     type: Number,
     min: [0, "wrong min stock"],
-    default: 0
+    default: 0,
   },
   brand: {
     type: String,
-    required: true
+    required: true,
   },
   category: {
     type: String,
-    required: true
+    required: true,
   },
   thumbnail: {
     type: String,
-    required: true
+    required: true,
   },
   images: {
     type: [String],
-    required: true
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
 });
 
+const virtual = productsSchema.virtual("id");
+virtual.get(function() {
+  return this._id; // Use a regular function to access 'this' not arrow fxn (my advice)
+});
+
+productsSchema.set("toJSON",{
+  virtuals:true,
+  versionKey:false,
+  transform :(doc,ret)=>{
+    delete ret._id
+  }
+})
 
 export const productsModel = mongoose.model("products", productsSchema);

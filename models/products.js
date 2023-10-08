@@ -1,36 +1,51 @@
 import mongoose from "mongoose";
 
 const productsSchema = new mongoose.Schema({
-//   firstname: {
-//     type: String,
-//     required: true,
-//   },
-//   lastname: {
-//     type: String,
-//     required: true,
-//   },
-//   email: {
-//     type: String,
-//     unique: true,
-//     required: true,
-//   },
-//   password: {
-//     type: String,
-//     select: false,
-//     required: true,
-//   },
-//   createdAt: {
-//     type: Date,
-//     default: Date.now(),
-//   },
-//   profileImageURL:{
-//     type:String,
-//     default:"profile_images/user_placeholder.png",
-//   },
-//   tokenCreated: {
-//     type: Boolean,
-//     default: false,
-//   },
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  price: { 
+    type: Number, 
+    required: true 
+  },
+  discountPercentage: {
+    type: Number,
+    min: [1, "wrong min discount"],
+    max: [99, "wrong max discount"],
+    default: 0,
+  },
+  rating: {
+    type: Number,
+    min: [1, "wrong min rating"],
+    max: [5, "wrong max rating"],
+    default: 0,
+  },
+  stock: {
+    type: Number,
+    min: [0, "wrong min stock"],
+    default: 0
+  },
+  brand: {
+    type: String,
+    required: true
+  },
+  category: {
+    type: String,
+    required: true
+  },
+  thumbnail: {
+    type: String,
+    required: true
+  },
+  images: {
+    type: [String],
+    required: true
+  },
 });
 
 export const productsModel = mongoose.model("products", productsSchema);

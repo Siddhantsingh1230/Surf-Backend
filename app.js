@@ -4,6 +4,7 @@ import path from "path";
 import productsRouter from "./routes/products.js";
 import brandsRouter from "./routes/brands.js";
 import categoriesRouter from "./routes/categories.js";
+import orderStateRouter from "./routes/orderState.js"
 
 export const app = express();
 
@@ -20,6 +21,7 @@ configDotenv({
 app.use("/products", productsRouter);
 app.use("/brands", brandsRouter);
 app.use("/category", categoriesRouter);
+app.use("/orderState", orderStateRouter);
 
 //Default route
 app.get("/", (req, res) => {

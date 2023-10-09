@@ -42,24 +42,20 @@ export const getAllProduct = async (req, res) => {
   }
   const countQuery = query.clone();
   const totalCount = await countQuery.countDocuments().exec();
-    res.set('X-Total-Count', totalCount);
 
-  if (!query) {
-    return res.status(404).json({ success: false, message: "No products" });
-  }
   if (req.query._page && req.query._limit) {
     const pageSize = parseInt(req.query._limit);
     const page = parseInt(req.query._page);
     query = query.skip(pageSize * (page - 1)).limit(pageSize);
   }
   try {
-    res.set('X-Total-Count',totalCount);
+    res.set("X-Total-Count", totalCount);
     const docs = await query.exec();
     res.status(200).json({
       success: true,
       products: docs,
     });
   } catch (error) {
-    return res.status(404).json({ success: false, message: "Error:"+error });
+    return res.status(404).json({ success: false, message: "Error:" + error });
   }
 };

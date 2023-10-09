@@ -9,6 +9,7 @@ const ordersSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  
   billingstate: {
     type: String,
     required: true,

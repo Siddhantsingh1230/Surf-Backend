@@ -75,3 +75,50 @@ export const createProducts = async (req, res) => {
       .json({ success: false, message: "Internal Server Error" + error });
   }
 };
+
+export const getProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productsModel.findById(id);
+    if (!product) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    }
+    res.status(200).json({ success: true, product });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Error" + error });
+  }
+};
+
+export const updateProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productsModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+    if (!product) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Product not updated" });
+    }
+    res.status(200).json({ success: true, product });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Error" + error });
+  }
+};
+
+export const deleteProductById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await productsModel.findByIdAndDelete(id);
+    if (!product) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Product not deleted" });
+    }
+    res.status(200).json({ success: true, message: "Product Deleted" });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Error" + error });
+  }
+};

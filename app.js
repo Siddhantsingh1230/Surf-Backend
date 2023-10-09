@@ -4,8 +4,8 @@ import path from "path";
 import productsRouter from "./routes/products.js";
 import brandsRouter from "./routes/brands.js";
 import categoriesRouter from "./routes/categories.js";
-import orderStateRouter from "./routes/orderState.js"
-
+import orderStateRouter from "./routes/orderState.js";
+import cors from "cors";
 export const app = express();
 
 //Middlewares

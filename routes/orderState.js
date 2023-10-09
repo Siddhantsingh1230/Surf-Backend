@@ -1,8 +1,10 @@
 import express from "express";
-import { createOrderState,getOrderState,createorderStates } from "../controllers/orderState.js";
+import { createOrderState,getOrderState,createOrderStates,deleteOrderStateById, updateOrderStateById } from "../controllers/orderState.js";
 
 const router = express.Router();
 router.get("/",getOrderState).post("/",createOrderState);
-router.post("/createOrderStates",createorderStates);
+router.post("/createOrderStates",createOrderStates);
+router.delete("/:id",deleteOrderStateById);
+router.patch("/:id",updateOrderStateById)
 
 export default router;

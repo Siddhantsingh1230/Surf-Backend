@@ -41,7 +41,7 @@ export const createOrderState = async (req,res) => {
     }
   };
 
-  export const createorderStates = async (req, res) => {
+  export const createOrderStates = async (req, res) => {
     try {
       const orderStates = req.body;
       for (const orderState of orderStates) {
@@ -52,5 +52,37 @@ export const createOrderState = async (req,res) => {
       res
         .status(500)
         .json({ success: false, message: "Internal Server Error" + error });
+    }
+  };
+  
+  export const deleteOrderStateById = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const orderState = await orderStateModel.findByIdAndDelete(id);
+      if (!orderState) {
+        return res
+          .status(400)
+          .json({ success: false, message: "OrderState not deleted" });
+      }
+      res.status(200).json({ success: true, message: "OrderState Deleted" });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: "Error" + error });
+    }
+  };
+
+  export const updateOrderStateById = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const orderState = await orderStateModel.findByIdAndUpdate(id, req.body, {
+        new: true,
+      });
+      if (!orderState) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Order State not updated" });
+      }
+      res.status(200).json({ success: true, orderState });
+    } catch (error) {
+      return res.status(500).json({ success: false, message: "Error" + error });
     }
   };

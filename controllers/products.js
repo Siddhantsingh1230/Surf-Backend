@@ -22,5 +22,44 @@ export const createProduct = async (req, res) => {
 };
 
 export const getAllProduct = async (req, res) => {
-  res.send("hello");
+  let query = productsModel.find({});
+  // case insensitive find or search
+  if (req.query.category) {
+    query = query.find({
+      category: { $regex: new RegExp(req.query.category, "i") },
+    });
+  }
+  if (req.query.brand) {
+    query = query.find({
+      brand: { $regex: new RegExp(req.query.brand, "i") },
+    });
+  }
+  // sorting and filtering
+  if (req.query._sort && req.query._order) {
+    const sortField = req.query._sort;
+    const sortOrder = req.query._order === "asc" ? 1 : -1;
+    query = query.sort({ [sortField]: sortOrder });
+  }
+  const countQuery = query.clone();
+  const totalCount = await countQuery.countDocuments().exec();
+    res.set('X-Total-Count', totalCount);
+
+  if (!query) {
+    return res.status(404).json({ success: false, message: "No products" });
+  }
+  if (req.query._page && req.query._limit) {
+    const pageSize = parseInt(req.query._limit);
+    const page = parseInt(req.query._page);
+    query = query.skip(pageSize * (page - 1)).limit(pageSize);
+  }
+  try {
+    res.set('X-Total-Count',totalCount);
+    const docs = await query.exec();
+    res.status(200).json({
+      success: true,
+      products: docs,
+    });
+  } catch (error) {
+    return res.status(404).json({ success: false, message: "Error:"+error });
+  }
 };

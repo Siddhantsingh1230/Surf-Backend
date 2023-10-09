@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 
 
-const notificationSchema = mongoose.Schema({
+const notificationSchema = new mongoose.Schema({
     msg:{
         type : String,
         required : true,

@@ -53,6 +53,7 @@ const productsSchema = new mongoose.Schema({
   },
 });
 
+//added vituals
 const virtual = productsSchema.virtual("id");
 virtual.get(function() {
   return this._id; // Use a regular function to access 'this' not arrow fxn (my advice)

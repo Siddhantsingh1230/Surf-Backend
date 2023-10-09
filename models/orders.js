@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ordersSchema = mongoose.SchemaTypes({
+const ordersSchema = new mongoose.Schema({
   checkoutEmail: {
     type: String,
     required: true,
@@ -57,4 +57,4 @@ const ordersSchema = mongoose.SchemaTypes({
   },
 });
 
-export const ordersModel = mongoose.Model("orders", ordersSchema);
+export const ordersModel = mongoose.model("orders", ordersSchema);

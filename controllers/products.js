@@ -21,7 +21,7 @@ export const createProduct = async (req, res) => {
   }
 };
 
-export const getAllProduct = async (req, res) => {
+export const getAllProducts = async (req, res) => {
   let query = productsModel.find({});
   // case insensitive find or search
   if (req.query.category) {
@@ -56,6 +56,22 @@ export const getAllProduct = async (req, res) => {
       products: docs,
     });
   } catch (error) {
-    return res.status(404).json({ success: false, message: "Error:" + error });
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" + error });
+  }
+};
+
+export const createProducts = async (req, res) => {
+  try {
+    const products = req.body;
+    for (const product of products) {
+      await productsModel.create(product);
+    }
+    res.status(201).json({ success: true, message: "Products created" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" + error });
   }
 };

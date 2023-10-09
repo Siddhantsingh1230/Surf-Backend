@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 
-const orderStatesSchema = mongoose.Schema({
+const orderStatesSchema = new mongoose.Schema({
     value : {
         type : String,
         required : true
@@ -13,4 +13,4 @@ const orderStatesSchema = mongoose.Schema({
 })
 
 
-export const orderStatesModel = mongoose.Model("orderstates",orderStatesSchema);
+export const orderStatesModel = mongoose.model("orderstates",orderStatesSchema);

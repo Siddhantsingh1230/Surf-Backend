@@ -4,6 +4,7 @@ import path from "path";
 import productsRouter from "./routes/products.js";
 import brandsRouter from "./routes/brands.js";
 import categoriesRouter from "./routes/categories.js";
+import cors from "cors";
 
 export const app = express();
 
@@ -15,6 +16,20 @@ app.use(express.static(path.join(path.resolve(), "public")));
 configDotenv({
   path: "./data/config.env",
 });
+
+//CORS
+app.use(
+  cors({
+    origin: [
+      process.env.FRONTEND_URI,
+      process.env.ADMIN_FRONTEND_URI,
+      "http://localhost:5000",
+      "http://localhost:3000",
+    ],
+    method: ["GET", "POST", "DELETE", "PUT", "PATCH"],
+    credentials: true,
+  })
+);
 
 //Routes
 app.use("/products", productsRouter);

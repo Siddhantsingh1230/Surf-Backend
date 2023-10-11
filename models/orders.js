@@ -19,8 +19,9 @@ const ordersSchema = new mongoose.Schema({
     required: true,
   },
   userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "users",
+    // type: mongoose.Schema.Types.ObjectId,
+    // ref: "users",
+    type: String,
     required: true,
   },
   paymentMethod: {
@@ -57,5 +58,19 @@ const ordersSchema = new mongoose.Schema({
     default: "pending",
   },
 });
+
+//added vituals
+const virtual = ordersSchema.virtual("id");
+virtual.get(function() {
+  return this._id; // Use a regular function to access 'this' not arrow fxn (my advice)
+});
+
+ordersSchema.set("toJSON",{
+  virtuals:true,
+  versionKey:false,
+  transform :(doc,ret)=>{
+    delete ret._id
+  }
+})
 
 export const ordersModel = mongoose.model("orders", ordersSchema);

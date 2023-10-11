@@ -53,6 +53,7 @@ export const updateCart = async (req, res) => {
     const cart = await cartModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+    cart = await cart.populate("product");
     if (!cart) {
       return res
         .status(400)

@@ -1,5 +1,5 @@
 import { usersModel } from "../models/users.js";
-
+import crypto from "crypto";
 
 export const signup = async (req, res) => {
   try {
@@ -11,16 +11,45 @@ export const signup = async (req, res) => {
         message: "User already exists",
       });
     }
-    // const hashedPassword = await bcrypt.hash(password, 10);
-    user = await usersModel.create({
-      username,
-      email,
-      phone,
+    const salt = crypto.randomBytes(16);
+    crypto.pbkdf2(
       password,
-    });
-    res
-      .status(201)
-      .json({ success: false, data: user, message: "User created" });
+      salt,
+      310000,
+      32,
+      "sha256",
+      async (err, hashedPassword) => {
+        user = await usersModel.create({
+          username,
+          email,
+          phone,
+          password: hashedPassword,
+          salt,
+        });
+        /// Sanitizing user
+        user = user.toObject();
+        delete user["password"];
+        delete user["salt"];
+        user.id = user._id;
+        // Remove the original '_id' field
+        delete user._id;
+        delete user.__v;
+
+        // to create session once user is created
+        req.login(user, (err) => {
+          if (err) {
+            res.status(500).json({
+              success: false,
+              message: "Error:" + error,
+            });
+          }
+          // user is send to the client
+          res
+            .status(201)
+            .json({ success: true, user, message: "User created" });
+        });
+      }
+    );
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -67,3 +96,15 @@ export const updateUserById = async (req, res) => {
   }
 };
 
+export const login = (req, res) => {
+  res.status(200).json({ success: true, user: req.user });
+};
+
+export const getUser = (req, res) => {
+  if (!req.user) {
+    return res
+      .status(404)
+      .json({ success: false, message: "user not logged in" });
+  }
+  res.status(200).json({ success: true, user: req.user });
+};

@@ -53,3 +53,20 @@ export const deleteOrderById = async (req, res) => {
     return res.status(500).json({ success: false, message: "Error" + error });
   }
 };
+
+export const getAllOrders = async (req, res) => {
+  try {
+    let query = ordersModel.find({});
+    const totalCount = await ordersModel.countDocuments({});
+    if (req.query._page && req.query._limit) {
+      const pageSize = parseInt(req.query._limit);
+      const page = parseInt(req.query._page);
+      query = query.skip(pageSize * (page - 1)).limit(pageSize);
+    }
+    const orders = await query.exec();
+    res.set("X-Total-Count", totalCount);
+    res.status(200).json({ success: true, orders });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Error" + error });
+  }
+};

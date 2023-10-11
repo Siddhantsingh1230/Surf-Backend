@@ -6,6 +6,7 @@ import brandsRouter from "./routes/brands.js";
 import categoriesRouter from "./routes/categories.js";
 import orderStateRouter from "./routes/orderState.js";
 import cartRouter from "./routes/cart.js";
+import notificationRouter from "./routes/notification.js"
 import cors from "cors";
 export const app = express();
 
@@ -38,6 +39,7 @@ app.use("/brands", brandsRouter);
 app.use("/category", categoriesRouter);
 app.use("/orderState", orderStateRouter);
 app.use("/cart", cartRouter);
+app.use("/notifications", notificationRouter);
 
 //Default route
 app.get("/", (req, res) => {

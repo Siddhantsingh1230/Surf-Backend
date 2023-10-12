@@ -34,7 +34,7 @@ export const getAllProducts = async (req, res) => {
       brand: { $regex: new RegExp(req.query.brand, "i") },
     });
   }
-  // sorting and filtering
+  // sorting and filterin      g
   if (req.query._sort && req.query._order) {
     const sortField = req.query._sort;
     const sortOrder = req.query._order === "asc" ? 1 : -1;

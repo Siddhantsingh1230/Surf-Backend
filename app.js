@@ -14,7 +14,10 @@ import { usersModel } from "./models/users.js";
 import passport from "passport";
 import session from "express-session";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JwtStrategy } from "passport-jwt";
+import { ExtractJwt as ExtractJwt } from "passport-jwt";
 import { isAuthenticated } from "./middlewares/Auth.js";
+import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 export const app = express();
@@ -49,6 +52,11 @@ app.use(
   })
 );
 
+//JWT options
+var opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = process.env.JWT_SECRET;
+
 //Routes
 app.use("/products", productsRouter);
 app.use("/brands", brandsRouter);
@@ -61,6 +69,7 @@ app.use("/user", userRouter);
 
 //Login logic
 passport.use(
+  "local",
   new LocalStrategy(async function (username, password, done) {
     try {
       let user = await usersModel
@@ -88,11 +97,30 @@ passport.use(
           delete user._id;
           delete user.__v;
           delete user.salt;
-          done(null, user);
+          // jwt token creation
+          const token = jwt.sign(user, process.env.JWT_SECRET_KEY);
+          done(null, { user, token });
         }
       );
     } catch (error) {
       done(error);
+    }
+  })
+);
+
+//jwt logic
+passport.use(
+  "jwt",
+  new JwtStrategy(opts, async (jwt_payload, done) => {
+    try {
+      const user = await usersModel.findById(jwt_payload.id);
+      if (user) {
+        return done(null, user); // this calls serializer
+      } else {
+        return done(null, false);
+      }
+    } catch (err) {
+      return done(err, false);
     }
   })
 );
